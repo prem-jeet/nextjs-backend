@@ -1,6 +1,6 @@
 import connect from "@/app/lib/DB";
 import User from "@/app/lib/models/user";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async () => {
     try {
@@ -11,4 +11,17 @@ export const GET = async () => {
         return new NextResponse("Error in fetching users " + error.message, { status: 500 });
     }
 
+}
+
+export const POST = async (req: Request) => {
+    try {
+        await connect();
+        const body = await req.json()
+        const user = new User(body);
+        user.save()
+        return new NextResponse("Post successfull..", { status: 200 });
+
+    } catch (error: any) {
+        return new NextResponse("Some error occured " + error.message, { status: 500 });
+    }
 }
